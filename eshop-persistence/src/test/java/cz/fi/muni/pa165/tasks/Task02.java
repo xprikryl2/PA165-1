@@ -21,9 +21,78 @@ import cz.fi.muni.pa165.entity.Product;
 @ContextConfiguration(classes = PersistenceSampleApplicationContext.class)
 public class Task02 extends AbstractTestNGSpringContextTests {
 
+        Category electro, kitchen;
+        Product flashlight, plate, robot;
+    
+        @BeforeClass
+        public void initialize() {
+            
+            electro = new Category();
+            electro.setName("Electro");
+            kitchen = new Category();
+            kitchen.setName("Kitchen");            
+            
+            robot = new Product();
+            plate = new Product();
+            flashlight = new Product();
+             
+            flashlight.setName("Flashlight");
+            robot.setName("Kitchen robot");
+            plate.setName("Plate");
+       
+            electro.addProduct(robot);
+            electro.addProduct(flashlight);
+            kitchen.addProduct(plate);
+            
+            
+            
+            EntityManager em = emf.createEntityManager();
+            em.getTransaction().begin();
+            
+            em.persist(electro);
+            em.persist(kitchen);
+            em.persist(flashlight);
+            em.persist(plate);
+            em.persist(robot);
+            
+            em.getTransaction().commit();
+            em.close();
+        }
+    
 	@PersistenceUnit
 	private EntityManagerFactory emf;
 
+        
+        @Test
+        private void category1() {
+            EntityManager em = emf.createEntityManager();
+            em.getTransaction().begin();
+            
+            
+            //assertContainsProductWithName(products, "");
+            
+            
+        }
+        
+        @Test
+        private void category2() {
+            
+        }
+        
+        @Test
+        private void product1() {
+            
+        }
+        
+        @Test
+        private void product2() {
+            
+        }
+        
+        @Test
+        private void product3() {
+            
+        }
 	
 	private void assertContainsCategoryWithName(Set<Category> categories,
 			String expectedCategoryName) {
