@@ -11,6 +11,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import cz.fi.muni.pa165.entity.Category;
 import cz.fi.muni.pa165.entity.Product;
+import java.awt.Color;
 
 public class MainJavaSe {
 	private static EntityManagerFactory emf;
@@ -22,7 +23,7 @@ public class MainJavaSe {
 		emf = Persistence.createEntityManagerFactory("default");
 		try {
 			// BEGIN YOUR CODE
-			task04();
+			task06();
 			// END YOUR CODE
 		} finally {
 			emf.close();
@@ -37,6 +38,19 @@ public class MainJavaSe {
 		// Then you have to start transaction using getTransaction().begin()
 		// Then use persist() to persist both of the categories and finally commit the transaction
 
+                EntityManager mng = emf.createEntityManager();
+                mng.getTransaction().begin();
+                Category electro = new Category();
+                electro.setName("Electronics");
+                Category music = new Category();
+                music.setName("Musical");
+                
+                mng.persist(electro);
+                mng.persist(music);
+                
+                mng.getTransaction().commit();
+                mng.close();
+                
 		// The code below is just testing code. Do not modify it
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -68,6 +82,15 @@ public class MainJavaSe {
 		// TODO under this line. create new EM and start new transaction. Merge
 		// the detached category
 		// into the context and change the name to "Electro"
+                
+                EntityManager newManager = emf.createEntityManager();
+                newManager.getTransaction().begin();
+                
+                newManager.detach(category);
+                category.setName("Electro");
+                
+                newManager.merge(category);
+                newManager.getTransaction().commit();
 
 
 		// The code below is just testing code. Do not modify it
@@ -95,9 +118,20 @@ public class MainJavaSe {
 		//
 		// To test your code uncomment the commented code at the end of this method.
 
+                Product product = new Product();
+                product.setName("Guitar");
+                product.setColor(Color.BLACK);
+                
+                EntityManager e = emf.createEntityManager();
+		e.getTransaction().begin();
+                
+                e.persist(product);
+                e.getTransaction().commit();
+                e.close();
 
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
+               
 		Product p = em.createQuery("select p from Product p", Product.class)
 				.getSingleResult();
 		em.getTransaction().commit();
